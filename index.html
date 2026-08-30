@@ -1,10 +1,725 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Baxter McCarthy</title>
-  </head>
-  <body>
-    <h1>Hi, I'm Baxter</h1>
-    <p>Welcome to my portfolio.</p>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Baxter McCarthy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #0D1B2A;
+      --slate:  #1E3A5F;
+      --panel:  #142237;
+      --white:  #F0F4F8;
+      --muted:  #8BA3BE;
+      --accent: #3B82F6;
+      --teal:   #2DD4BF;
+      --mono:   'JetBrains Mono', monospace;
+      --sans:   'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(13, 27, 42, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.12);
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--teal);
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 6rem 2.5rem 4rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero-inner { max-width: 700px; }
+
+    .terminal-prompt {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--teal);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .terminal-prompt::before {
+      content: '▸';
+      color: var(--accent);
+    }
+
+    .hero-name {
+      font-family: var(--mono);
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-name span { color: var(--accent); }
+
+    .hero-bio {
+      font-family: var(--sans);
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.65rem 1.25rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: #2563EB; }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid rgba(139, 163, 190, 0.3);
+    }
+
+    .btn-outline:hover {
+      color: var(--white);
+      border-color: var(--white);
+    }
+
+    /* ── SECTION SHARED ── */
+    section {
+      padding: 5rem 2.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--teal);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-family: var(--mono);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 3rem;
+      letter-spacing: -0.02em;
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .project-card {
+      background: var(--panel);
+      border: 1px solid rgba(59, 130, 246, 0.1);
+      border-radius: 6px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: border-color 0.2s, transform 0.2s;
+      cursor: default;
+    }
+
+    .project-card:hover {
+      border-color: rgba(59, 130, 246, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .project-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .project-lang {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--teal);
+      background: rgba(45, 212, 191, 0.08);
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+    }
+
+    .project-links {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .project-links a {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .project-links a:hover { color: var(--accent); }
+
+    .project-name {
+      font-family: var(--mono);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .project-desc {
+      font-family: var(--sans);
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .project-tags {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-top: 0.25rem;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      border: 1px solid rgba(139, 163, 190, 0.2);
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+    }
+
+    /* ── ADD PROJECT CARD ── */
+    .project-card.add-card {
+      border-style: dashed;
+      border-color: rgba(59, 130, 246, 0.2);
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 180px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .project-card.add-card:hover {
+      border-color: var(--accent);
+      background: rgba(59, 130, 246, 0.04);
+      transform: none;
+    }
+
+    .add-icon {
+      font-size: 1.5rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      opacity: 0.7;
+    }
+
+    .add-label {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--panel);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 8px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .modal-title {
+      font-family: var(--mono);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .field label {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--teal);
+    }
+
+    .field input, .field textarea, .field select {
+      background: var(--navy);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 4px;
+      color: var(--white);
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      padding: 0.6rem 0.75rem;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder { color: var(--muted); opacity: 0.6; }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus { border-color: var(--accent); }
+
+    .field select option { background: var(--navy); }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+
+    /* ── SKILLS ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .skill-chip {
+      background: var(--panel);
+      border: 1px solid rgba(59, 130, 246, 0.1);
+      border-radius: 4px;
+      padding: 0.6rem 0.9rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .skill-chip::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--teal);
+      flex-shrink: 0;
+    }
+
+    /* ── CONTACT ── */
+    .contact-inner {
+      background: var(--panel);
+      border: 1px solid rgba(59, 130, 246, 0.1);
+      border-radius: 6px;
+      padding: 2.5rem;
+      max-width: 520px;
+    }
+
+    .contact-inner p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 1.75rem;
+      line-height: 1.7;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .contact-link:hover { color: var(--white); }
+
+    .contact-link .cl-icon {
+      width: 30px;
+      text-align: center;
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(59, 130, 246, 0.08);
+      padding: 2rem 2.5rem;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: rgba(59, 130, 246, 0.08);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.25rem; }
+      .hero, section { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .nav-links { gap: 1.25rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .project-card { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">bmc@portfolio:~$</span>
+  <ul class="nav-links">
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="terminal-prompt">baxtermc.dev — software engineer</div>
+    <h1 class="hero-name">Baxter<br><span>McCarthy</span></h1>
+    <p class="hero-bio">
+      I build things for the web. Here you'll find projects I've worked on — from quick experiments to things I actually shipped. Click a project to learn more, or reach out if you want to work together.
+    </p>
+    <div class="hero-links">
+      <a class="btn btn-primary" href="#projects">View projects</a>
+      <a class="btn btn-outline" href="#contact">Get in touch</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">// work</div>
+  <div class="section-title">Projects</div>
+
+  <div class="projects-grid" id="projects-grid">
+
+    <!-- Example project 1 -->
+    <div class="project-card">
+      <div class="project-meta">
+        <span class="project-lang">Python</span>
+        <div class="project-links">
+          <a href="#">GitHub</a>
+          <a href="#">Live</a>
+        </div>
+      </div>
+      <div class="project-name">weather-cli</div>
+      <div class="project-desc">A command-line tool that fetches real-time weather data and displays a 7-day forecast in the terminal, with ASCII chart rendering.</div>
+      <div class="project-tags">
+        <span class="tag">CLI</span>
+        <span class="tag">API</span>
+        <span class="tag">argparse</span>
+      </div>
+    </div>
+
+    <!-- Example project 2 -->
+    <div class="project-card">
+      <div class="project-meta">
+        <span class="project-lang">JavaScript</span>
+        <div class="project-links">
+          <a href="#">GitHub</a>
+        </div>
+      </div>
+      <div class="project-name">flashcard-app</div>
+      <div class="project-desc">A spaced repetition flashcard app built with vanilla JS. Cards are stored in localStorage and scheduled using the SM-2 algorithm.</div>
+      <div class="project-tags">
+        <span class="tag">Vanilla JS</span>
+        <span class="tag">SRS</span>
+        <span class="tag">localStorage</span>
+      </div>
+    </div>
+
+    <!-- Example project 3 -->
+    <div class="project-card">
+      <div class="project-meta">
+        <span class="project-lang">Python</span>
+        <div class="project-links">
+          <a href="#">GitHub</a>
+          <a href="#">Live</a>
+        </div>
+      </div>
+      <div class="project-name">budget-tracker</div>
+      <div class="project-desc">A personal finance tracker that parses CSV bank exports, categorizes transactions, and outputs monthly summaries as charts.</div>
+      <div class="project-tags">
+        <span class="tag">pandas</span>
+        <span class="tag">matplotlib</span>
+        <span class="tag">CSV</span>
+      </div>
+    </div>
+
+    <!-- Add new project card -->
+    <div class="project-card add-card" id="add-project-btn">
+      <div class="add-icon">＋</div>
+      <div class="add-label">Add a project</div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">// stack</div>
+  <div class="section-title">Skills</div>
+
+  <div class="skills-grid">
+    <div class="skill-chip">Python</div>
+    <div class="skill-chip">JavaScript</div>
+    <div class="skill-chip">HTML / CSS</div>
+    <div class="skill-chip">SQL</div>
+    <div class="skill-chip">Git</div>
+    <div class="skill-chip">React</div>
+    <div class="skill-chip">Node.js</div>
+    <div class="skill-chip">Linux</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">// reach out</div>
+  <div class="section-title">Contact</div>
+
+  <div class="contact-inner">
+    <p>Available for internships, side projects, and collaborations. The best way to reach me is by email — I usually respond within a day.</p>
+    <div class="contact-links">
+      <a class="contact-link" href="mailto:baxter@example.com">
+        <span class="cl-icon">✉</span>
+        baxter@example.com
+      </a>
+      <a class="contact-link" href="https://github.com/" target="_blank" rel="noopener">
+        <span class="cl-icon">⌥</span>
+        github.com/baxtermc
+      </a>
+      <a class="contact-link" href="https://linkedin.com/" target="_blank" rel="noopener">
+        <span class="cl-icon">↗</span>
+        linkedin.com/in/baxtermc
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  Built by Baxter McCarthy · 2026
+</footer>
+
+<!-- ADD PROJECT MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-title" id="modal-title">// new project</div>
+
+    <div class="field">
+      <label for="p-name">Project name</label>
+      <input id="p-name" type="text" placeholder="my-project" />
+    </div>
+
+    <div class="field">
+      <label for="p-lang">Language</label>
+      <select id="p-lang">
+        <option value="Python">Python</option>
+        <option value="JavaScript">JavaScript</option>
+        <option value="TypeScript">TypeScript</option>
+        <option value="Rust">Rust</option>
+        <option value="Go">Go</option>
+        <option value="C++">C++</option>
+        <option value="Java">Java</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="p-desc">Description</label>
+      <textarea id="p-desc" rows="3" placeholder="What does it do?"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="p-tags">Tags (comma-separated)</label>
+      <input id="p-tags" type="text" placeholder="React, API, Node.js" />
+    </div>
+
+    <div class="field">
+      <label for="p-github">GitHub URL (optional)</label>
+      <input id="p-github" type="url" placeholder="https://github.com/..." />
+    </div>
+
+    <div class="field">
+      <label for="p-live">Live URL (optional)</label>
+      <input id="p-live" type="url" placeholder="https://..." />
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="modal-cancel">Cancel</button>
+      <button class="btn btn-primary" id="modal-add">Add project</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const overlay   = document.getElementById('modal-overlay');
+  const addBtn    = document.getElementById('add-project-btn');
+  const cancelBtn = document.getElementById('modal-cancel');
+  const addProjBtn = document.getElementById('modal-add');
+  const grid      = document.getElementById('projects-grid');
+
+  function openModal() { overlay.classList.add('open'); document.getElementById('p-name').focus(); }
+  function closeModal() {
+    overlay.classList.remove('open');
+    ['p-name','p-desc','p-tags','p-github','p-live'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('p-lang').value = 'Python';
+  }
+
+  addBtn.addEventListener('click', openModal);
+  cancelBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  addProjBtn.addEventListener('click', () => {
+    const name  = document.getElementById('p-name').value.trim();
+    const lang  = document.getElementById('p-lang').value;
+    const desc  = document.getElementById('p-desc').value.trim();
+    const tags  = document.getElementById('p-tags').value.split(',').map(t => t.trim()).filter(Boolean);
+    const gh    = document.getElementById('p-github').value.trim();
+    const live  = document.getElementById('p-live').value.trim();
+
+    if (!name) { document.getElementById('p-name').focus(); return; }
+
+    const card = document.createElement('div');
+    card.className = 'project-card';
+
+    const linkHtml = [
+      gh   ? `<a href="${gh}"   target="_blank" rel="noopener">GitHub</a>` : '',
+      live ? `<a href="${live}" target="_blank" rel="noopener">Live</a>`   : ''
+    ].join('');
+
+    const tagsHtml = tags.map(t => `<span class="tag">${t}</span>`).join('');
+
+    card.innerHTML = `
+      <div class="project-meta">
+        <span class="project-lang">${lang}</span>
+        <div class="project-links">${linkHtml}</div>
+      </div>
+      <div class="project-name">${name}</div>
+      <div class="project-desc">${desc || 'No description yet.'}</div>
+      ${tagsHtml ? `<div class="project-tags">${tagsHtml}</div>` : ''}
+    `;
+
+    grid.insertBefore(card, addBtn.parentNode ? addBtn : grid.lastElementChild);
+    closeModal();
+  });
+</script>
+</body>
 </html>
